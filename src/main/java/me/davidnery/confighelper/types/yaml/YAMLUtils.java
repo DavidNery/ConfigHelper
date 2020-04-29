@@ -31,11 +31,9 @@ public class YAMLUtils {
                             objectKey = defaultConstructor.newInstance();
                         }
 
-                        if (objectKey instanceof BaseSection) {
-                            Field section = BaseSection.class.getDeclaredFields()[0];
-                            section.setAccessible(true);
-                            section.set(objectKey, entry.getValue());
-                        } else
+                        if (objectKey instanceof BaseSection)
+                            setMapSection(objectKey, entry.getValue());
+                        else
                             field.set(object, setup(
                                     objectKey,
                                     (LinkedHashMap<String, Object>) entry.getValue()
