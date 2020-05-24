@@ -32,14 +32,15 @@ public class YAMLUtils {
                         }
 
                         if (objectKey instanceof BaseSection)
-                            setMapSection(objectKey, (BaseSection) entry.getValue());
+                            setMapSection(entry.getValue(), (BaseSection) objectKey);
                         else
                             field.set(object, setup(
                                     objectKey,
                                     (LinkedHashMap<String, Object>) entry.getValue()
                             ));
                     } else {
-                        if (field.getType() != entry.getValue().getClass() && !field.getType().isPrimitive())
+                        if (!field.getType().isAssignableFrom(entry.getValue().getClass())
+                                && !field.getType().isPrimitive())
                             throw new IncompatibleKeyType(object, field, entry.getValue().getClass());
 
                         field.set(object, entry.getValue());
