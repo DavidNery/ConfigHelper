@@ -32,7 +32,7 @@ public class YAMLUtils {
                         }
 
                         if (objectKey instanceof BaseSection)
-                            setMapSection(objectKey, entry.getValue());
+                            setMapSection(objectKey, (BaseSection) entry.getValue());
                         else
                             field.set(object, setup(
                                     objectKey,
@@ -46,7 +46,7 @@ public class YAMLUtils {
                     }
                 }
             }
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException | SectionNotValid e) {
             e.printStackTrace();
         }
 
