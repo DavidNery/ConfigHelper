@@ -9,6 +9,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 
 public abstract class YAMLConfiguration extends YAMLSerialization implements IConfig {
@@ -74,7 +75,7 @@ public abstract class YAMLConfiguration extends YAMLSerialization implements ICo
         if (!file.exists()) throw new FileNotFoundException();
 
         InputStream inputStream = new FileInputStream(file);
-        Object config = new Yaml().load(inputStream);
+        Object config = new Yaml().load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
         if (!(config instanceof LinkedHashMap)) throw new ConfigNotValid();
 
@@ -87,14 +88,14 @@ public abstract class YAMLConfiguration extends YAMLSerialization implements ICo
             created = file.createNewFile();
 
         if (replaceIfExists || created) {
-            FileWriter fileWriter = new FileWriter(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
 
             DumperOptions options = new DumperOptions();
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            new Yaml(options).dump(object, fileWriter);
+            new Yaml(options).dump(object, new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8));
 
-            fileWriter.flush();
-            fileWriter.close();
+            fileOutputStream.flush();
+            fileOutputStream.close();
         }
     }
 }
